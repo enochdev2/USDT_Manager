@@ -6,6 +6,7 @@ import {
   getAssociatedTokenAddress,
   // getMint,
 } from "@solana/spl-token";
+import logo from "../src/assets/golem.png"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"; // Correct import
 
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
@@ -118,9 +119,12 @@ export default function App() {
   return (
     <div>
       {/* Navbar */}
-      <nav className="bg-gradient-to-tr from-[#1d0934] via-[#0b0417] to-[#441273] p-4 shadow-lg">
+      <nav className="bg-gradient-to-tr from-[#1d0934] via-[#0b0417] to-[#441273] py-4 px-10 shadow-lg">
         <div className="max-w-6xl mx-auto flex justify-between items-center text-white">
-          <h1 className="font-bold text-2xl">Freeze Token</h1>
+          <div className="flex space-x-2  items-center">
+            <img src={logo} className="w-[40px] h-[40px]" alt="" />
+          <h1 className="font-bold text-2xl">Golem</h1>
+          </div>
           <ul className="flex space-x-6">
             <div>
               {/* Connect Button */}
