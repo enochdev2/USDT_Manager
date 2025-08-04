@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { PublicKey, Transaction } from "@solana/web3.js";
 import { createFreezeAccountInstruction } from "@solana/spl-token";
-import { getMint, getAccount, AccountState } from "@solana/spl-token";
+import { getMint, getAccount } from "@solana/spl-token";
 import {
-  freezeAccount,
   getAssociatedTokenAddress,
   // getMint,
 } from "@solana/spl-token";
