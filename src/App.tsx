@@ -21,7 +21,7 @@ if (typeof global.Buffer === "undefined") {
 
 export default function App() {
   const { connection } = useConnection();
-  const { publicKey, signTransaction, disconnect, connected, sendTransaction } =
+  const { publicKey, disconnect, connected, sendTransaction } =
     useWallet();
   const [walletAddress, setWalletAddress] = useState("");
   const [walletAddresss, setWalletAddresss] = useState("");
@@ -46,7 +46,7 @@ export default function App() {
 
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
-      const userWallet = publicKey;
+      // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       const userWalletAddress = new PublicKey(walletAddresss);
 
@@ -111,7 +111,7 @@ export default function App() {
       setMessage("✅ Token account frozen successfully!");
     } catch (err) {
       console.error(err);
-      setMessage("❌ Failed to freeze account: " + err.message);
+      setMessage("❌ Failed to freeze account: " + err);
     }
   };
 
