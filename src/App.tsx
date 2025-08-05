@@ -6,13 +6,13 @@ import {
   getAssociatedTokenAddress,
   // getMint,
 } from "@solana/spl-token";
-import logo from "../src/assets/golem.png"
+import logo from "../src/assets/golem.png";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"; // Correct import
+import { ToastContainer, toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
+import "react-toastify/dist/ReactToastify.css";
 
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-// import { PhantomWalletAdapter, SolletWalletAdapter } from "@solana/wallet-adapter-wallets";
-
-// Buffer polyfill (if needed)
 import { Buffer } from "buffer";
 if (typeof global.Buffer === "undefined") {
   global.Buffer = Buffer;
@@ -22,14 +22,14 @@ if (typeof global.Buffer === "undefined") {
 
 export default function App() {
   const { connection } = useConnection();
-  const { publicKey, disconnect, connected, sendTransaction } =
-    useWallet();
+  const { publicKey, disconnect, connected, sendTransaction } = useWallet();
   const [walletAddress, setWalletAddress] = useState("");
   const [walletAddresss, setWalletAddresss] = useState("");
   const [mintAddress, setMintAddress] = useState(
     "29WHkYWRa2mHN8ydAKJ83fW7CVT95EPVmwRg9S54L1Sn"
   );
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Initialize wallet connection
 
@@ -41,9 +41,12 @@ export default function App() {
 
   const handleFreeze = async () => {
     if (!publicKey || !sendTransaction) {
-      setMessage("❌ Please connect your wallet first.");
+      toast.error("❌ Please connect your wallet first.");
+      console.error("❌ Please connect your wallet first.");
       return;
     }
+
+    setLoading(true);
 
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
@@ -60,10 +63,14 @@ export default function App() {
       const mintInfo = await getMint(connection, mint);
       if (!mintInfo.freezeAuthority) {
         console.error("Mint has no freeze authority");
+        toast.error("❌ Mint has no freeze authority.");
+        setLoading(false);
         return;
       }
       if (mintInfo.freezeAuthority.toString() !== publicKey.toString()) {
         console.error("Connected wallet is not the freeze authority");
+        toast.error("❌ Connected wallet is not the freeze authority.");
+        setLoading(false);
         return;
       }
 
@@ -73,10 +80,16 @@ export default function App() {
         console.error(
           "Token account does not hold tokens from the specified mint"
         );
+        toast.error(
+          "❌ Token account does not hold tokens from the specified mint."
+        );
+        setLoading(false);
         return;
       }
       if (tokenAccountInfo.isFrozen) {
         console.error("Token account is already frozen");
+        toast.error("❌ Token account is already frozen.");
+        setLoading(false);
         return;
       }
 
@@ -109,10 +122,15 @@ export default function App() {
 
       // Confirm the transaction
 
+      toast.success("✅ Token account frozen successfully!");
+
       setMessage("✅ Token account frozen successfully!");
     } catch (err) {
       console.error(err);
       setMessage("❌ Failed to freeze account: " + err);
+      toast.error(`❌ Failed to freeze account: ${err}`);
+    } finally {
+      setLoading(false); // Hide spinner when done
     }
   };
 
@@ -123,7 +141,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto flex justify-between items-center text-white">
           <div className="flex space-x-2  items-center">
             <img src={logo} className="w-[40px] h-[40px]" alt="" />
-          <h1 className="font-bold text-2xl">Golem</h1>
+            <h1 className="font-bold text-2xl">Golem</h1>
           </div>
           <ul className="flex space-x-6">
             <div>
@@ -170,7 +188,6 @@ export default function App() {
                 {" "}
                 Wallet Address
               </label>
-              
               <input
                 type="text"
                 placeholder="User Wallet Address"
@@ -207,6 +224,12 @@ export default function App() {
               Freeze Account
             </button>
 
+            {loading && (
+              <div className="flex justify-center mt-4">
+                <ClipLoader size={50} color="#ffffff" loading={loading} />
+              </div>
+            )}
+
             {message && (
               <p className="mt-4 text-center text-sm text-gray-700">
                 {message}
@@ -215,6 +238,8 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
