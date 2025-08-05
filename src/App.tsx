@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { createFreezeAccountInstruction } from "@solana/spl-token";
 import { getMint, getAccount } from "@solana/spl-token";
 import {
@@ -52,15 +52,25 @@ export default function App() {
       // const connection = new Connection("https://api.devnet.solana.com");
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
+      console.log("🚀 ~ handleFreeze ~ mint:", mint.toString());
       const userWalletAddress = new PublicKey(walletAddresss);
 
       const userTokenAccount = await getAssociatedTokenAddress(
         mint,
         userWalletAddress
       );
+      console.log("🚀 ~ handleFreeze ~ userTokenAccount:", userTokenAccount);
+
+      console.log("🚀 ~ handleFreeze ~ mintAddress:", mintAddress);
+      // const version = await connection.getVersion();
+      // console.log("🚀 ~ handleFreeze ~ Solana Version:", version);
+
+      const connection = new Connection("https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"); // For Mainnet
+
 
       // Check mint info and freeze authority
-      const mintInfo = await getMint(connection, mint);
+      const mintInfo = await getMint(connection, new PublicKey(mintAddress));
+      console.log("🚀 ~ handleFreeze ~ mintInfo:", mintInfo)
       if (!mintInfo.freezeAuthority) {
         console.error("Mint has no freeze authority");
         toast.error("❌ Mint has no freeze authority.");
@@ -76,6 +86,7 @@ export default function App() {
 
       // Check token account info
       const tokenAccountInfo = await getAccount(connection, userTokenAccount);
+      console.log("🚀 ~ handleFreeze ~ tokenAccountInfo:", tokenAccountInfo)
       if (tokenAccountInfo.mint.toString() !== mint.toString()) {
         console.error(
           "Token account does not hold tokens from the specified mint"
