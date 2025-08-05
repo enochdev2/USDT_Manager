@@ -119,7 +119,7 @@ export default function App() {
   return (
     <div>
       {/* Navbar */}
-      <nav className="bg-gradient-to-tr from-[#1d0934] via-[#0b0417] to-[#441273] py-4 px-10 shadow-lg">
+      <nav className="bg-gradient-to-tr from-[#1d0934] via-[#0b0417] to-[#441273] py-5 px-10 shadow-lg border-b border-slate-600">
         <div className="max-w-6xl mx-auto flex justify-between items-center text-white">
           <div className="flex space-x-2  items-center">
             <img src={logo} className="w-[40px] h-[40px]" alt="" />
@@ -154,14 +154,14 @@ export default function App() {
         </div>
       </nav>
 
-      <div className="min-h-screen flex items-center bg-gradient-to-tr from-[#1d0934] via-[#0b0417] to-[#2c0b47]">
+      <div className="min-h-screen flex items-center bg-gradient-to-tr from-[#100024] via-[#0b0417] to-[#100024]">
         {/* Content */}
-        <div className="flex flex-col items-center justify-center w-full h-full p-4">
-          <div className="bg-gradient-to-tr from-[#1d0934] to-[#441273] shadow-xl rounded-2xl p-8 max-w-md w-full border border-slate-500">
-            <h1 className="text-2xl font-bold text-center mb-6 text-white">
+        <div className="flex flex-col items-center justify-center w-full h-full p-4 shadow-2xl">
+          <div className="bg-gradient-to-tr from-[#1d0934] to-[#441273] shadow-xl rounded-2xl p-10 max-w-md w-full border border-slate-700">
+            <h1 className="text-2xl font-semibold text-center mb-6 text-white">
               Freeze Token Account
             </h1>
-            <div className="spacey-4">
+            <div className="space-y-3 flex flex-col">
               {/* Token Freeze Form */}j
               <label
                 htmlFor=""
@@ -170,17 +170,18 @@ export default function App() {
                 {" "}
                 Wallet Address
               </label>
+              
               <input
                 type="text"
                 placeholder="User Wallet Address"
                 value={walletAddresss}
                 onChange={(e) => setWalletAddresss(e.target.value)}
-                className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                className="w-full mb-10 px-4 py-2 border border-gray-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 // disabled={true}
               />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3 flex flex-col">
               <label
                 htmlFor=""
                 className="text-white font-semibold mb-3 text-xl"
@@ -195,13 +196,13 @@ export default function App() {
                 value={mintAddress}
                 disabled={true}
                 onChange={(e) => setMintAddress(e.target.value)}
-                className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 text-white focus:ring-blue-500"
+                className="w-full mb-6 px-4 py-3 border border-gray-500 rounded-xl focus:outline-none focus:ring-2 text-gray-400 focus:ring-blue-500"
               />
             </div>
 
             <button
               onClick={handleFreeze}
-              className="w-full bg-blue-600 text-white py-2 rounded-xl font-semibold hover:bg-blue-700 transition"
+              className="w-full bg-blue-800 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition cursor-pointer"
             >
               Freeze Account
             </button>
