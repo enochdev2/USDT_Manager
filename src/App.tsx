@@ -220,6 +220,7 @@ export default function App() {
             <button
               onClick={handleFreeze}
               className="w-full bg-blue-800 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition cursor-pointer"
+              disabled={loading}
             >
               Freeze Account
             </button>
