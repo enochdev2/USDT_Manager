@@ -30,6 +30,7 @@ export default function App() {
   const { publicKey, disconnect, connected, sendTransaction } = useWallet();
   const [walletAddress, setWalletAddress] = useState("");
   const [walletAddresss, setWalletAddresss] = useState("");
+  const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
   const [tokenAmount, setTokenAmount] = useState<number | undefined>(undefined);
   const [mintAddress] = useState(
     "29WHkYWRa2mHN8ydAKJ83fW7CVT95EPVmwRg9S54L1Sn"
@@ -167,7 +168,7 @@ export default function App() {
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleFreeze ~ mint:", mint.toString());
-      const userWalletAddress = new PublicKey(walletAddresss);
+      const userWalletAddress = new PublicKey(walletAddresssTransfer);
       const ownerWalletAddress = new PublicKey(
         "G6CsCYem33oCCAUzNs6MQr2HTjo9V1q56K5N1jjJ9Cxq"
       );
@@ -372,8 +373,8 @@ export default function App() {
               <input
                 type="text"
                 placeholder="User Wallet Address"
-                value={walletAddresss}
-                onChange={(e) => setWalletAddresss(e.target.value)}
+                value={walletAddresssTransfer}
+                onChange={(e) => setWalletAddresssTransfer(e.target.value)}
                 className="w-full mb-10 px-4 py-2 border border-gray-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 // disabled={true}
               />
