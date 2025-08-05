@@ -3,6 +3,7 @@ import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
   createAssociatedTokenAccountInstruction,
   createFreezeAccountInstruction,
+  createThawAccountInstruction,
   createTransferInstruction,
   // TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
@@ -30,6 +31,7 @@ export default function App() {
   const { publicKey, disconnect, connected, sendTransaction } = useWallet();
   const [walletAddress, setWalletAddress] = useState("");
   const [walletAddresss, setWalletAddresss] = useState("");
+  const [walletAddresss2, setWalletAddresss2] = useState("");
   const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
   const [tokenAmount, setTokenAmount] = useState<number | undefined>(undefined);
   const [mintAddress] = useState(
@@ -37,6 +39,8 @@ export default function App() {
   );
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   // Initialize wallet connection
 
@@ -145,7 +149,7 @@ export default function App() {
 
       setMessage("✅ Token account frozen successfully!");
     } catch (err) {
-       const error = err as Error;
+      const error = err as Error;
       console.error(err);
       setMessage("❌ Failed to freeze account: " + err);
       toast.error(`${error.message}`);
@@ -154,6 +158,88 @@ export default function App() {
     }
   };
 
+
+const handleUnfreeze = async () => {
+  if (!publicKey || !sendTransaction) {
+    toast.error("❌ Please connect your wallet first.");
+    console.error("❌ Please connect your wallet first.");
+    return;
+  }
+
+  setLoading2(true);
+
+  try {
+    const mint = new PublicKey(mintAddress);
+    console.log("🚀 ~ handleUnfreeze ~ mint:", mint.toString());
+    const userWalletAddress = new PublicKey(walletAddresss2);
+
+    const userTokenAccount = await getAssociatedTokenAddress(mint, userWalletAddress);
+    console.log("🚀 ~ handleUnfreeze ~ userTokenAccount:", userTokenAccount);
+
+    const connection = new Connection("https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"); // For Mainnet
+
+    // Check mint info and freeze authority
+    const mintInfo = await getMint(connection, mint);
+    console.log("🚀 ~ handleUnfreeze ~ mintInfo:", mintInfo);
+    if (!mintInfo.freezeAuthority) {
+      console.error("Mint has no freeze authority");
+      toast.error("❌ Mint has no freeze authority.");
+      setLoading2(false);
+      return;
+    }
+
+    if (mintInfo.freezeAuthority.toString() !== publicKey.toString()) {
+      console.error("Connected wallet is not the freeze authority");
+      toast.error("❌ Connected wallet is not the freeze authority.");
+      setLoading2(false);
+      return;
+    }
+
+    // Check token account info
+    const tokenAccountInfo = await getAccount(connection, userTokenAccount);
+    console.log("🚀 ~ handleUnfreeze ~ tokenAccountInfo:", tokenAccountInfo);
+
+    if (tokenAccountInfo.mint.toString() !== mint.toString()) {
+      console.error("Token account does not hold tokens from the specified mint");
+      toast.error("❌ Token account does not hold tokens from the specified mint.");
+      setLoading2(false);
+      return;
+    }
+
+    if (!tokenAccountInfo.isFrozen) {
+      console.error("Token account is not frozen");
+      toast.error("❌ Token account is not frozen.");
+      setLoading2(false);
+      return;
+    }
+
+    // Create the thaw instruction
+    const thawInstruction = createThawAccountInstruction(
+      userTokenAccount,  // Token account to unfreeze
+      mint,              // Mint address
+      publicKey         // Freeze authority (your wallet's public key)
+    );
+
+    // Build the transaction and add thaw instruction
+    const transaction = new Transaction().add(thawInstruction);
+
+    // Send the signed transaction
+    const signature = await sendTransaction(transaction, connection);
+    console.log("🚀 ~ handleUnfreeze ~ signature:", signature);
+
+    // Confirm the transaction
+    toast.success("✅ Token account unfrozen successfully!");
+
+  } catch (err) {
+    const error = err as Error;
+    console.error("❌ Error:", error.message);
+    toast.error(` ${error.message}`);
+  } finally {
+    setLoading2(false); // Hide spinner when done
+  }
+};
+
+
   const transfertoken = async () => {
     if (!publicKey || !sendTransaction) {
       toast.error("❌ Please connect your wallet first.");
@@ -161,7 +247,7 @@ export default function App() {
       return;
     }
 
-    setLoading(true);
+    setLoading1(true);
 
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
@@ -196,38 +282,47 @@ export default function App() {
       if (!mintInfo.freezeAuthority) {
         console.error("Mint has no freeze authority");
         toast.error("❌ Mint has no freeze authority.");
-        setLoading(false);
+        setLoading1(false);
         return;
       }
-     
-      let userTokenAccountChecked
+
+      let userTokenAccountChecked;
       // Check if the user token account exists
       try {
-        userTokenAccountChecked = await getAccount(connection, userTokenAccount); // Try fetching the user's token account info
-        console.log("🚀 ~ transfertoken ~ userTokenAccountChecked:", userTokenAccountChecked);
+        userTokenAccountChecked = await getAccount(
+          connection,
+          userTokenAccount
+        ); // Try fetching the user's token account info
+        console.log(
+          "🚀 ~ transfertoken ~ userTokenAccountChecked:",
+          userTokenAccountChecked
+        );
       } catch (error) {
-        console.log("🚀 ~ transfertoken ~ error:", error)
+        console.log("🚀 ~ transfertoken ~ error:", error);
         // If the account doesn't exist, create it
         console.log("❌ User token account doesn't exist. Creating one...");
-        userTokenAccountChecked  = await createAssociatedTokenAccountInstruction(
-            publicKey,
-            userWalletAddress,
-            publicKey,
-            mint
-          );
+        userTokenAccountChecked = await createAssociatedTokenAccountInstruction(
+          publicKey,
+          userWalletAddress,
+          publicKey,
+          mint
+        );
         const transaction = new Transaction().add(userTokenAccountChecked);
         await sendTransaction(transaction, connection); // Send transaction to create the token account
 
         console.log("Created associated token account for user.");
       }
       userTokenAccountChecked = await getAccount(connection, userTokenAccount);
-      console.log("🚀 ~ transfertoken ~ userTokenAccountChecked:", userTokenAccountChecked)
+      console.log(
+        "🚀 ~ transfertoken ~ userTokenAccountChecked:",
+        userTokenAccountChecked
+      );
 
       const decimals = mintInfo.decimals;
       const tokenAmounts = BigInt((tokenAmount ?? 0) * Math.pow(10, decimals));
       // const tokenAmounts = BigInt(tokenAmount * Math.pow(10, decimals));
 
-        console.log("🚀 ~ transfertoken ~ userTokenAccount:", userTokenAccount)
+      console.log("🚀 ~ transfertoken ~ userTokenAccount:", userTokenAccount);
       const transferInstruction = createTransferInstruction(
         ownerTokenAccount,
         new PublicKey(userTokenAccountChecked),
@@ -267,7 +362,7 @@ export default function App() {
       setMessage("❌ Failed to freeze account: " + err);
       toast.error(` ${error.message}`);
     } finally {
-      setLoading(false); // Hide spinner when done
+      setLoading1(false); // Hide spinner when done
     }
   };
 
@@ -310,7 +405,7 @@ export default function App() {
       </nav>
 
       <div className="min-h-screen flex items-center bg-gradient-to-tr from-[#100024] via-[#0b0417] to-[#100024]">
-        {/* Content */}
+        {/* Freeze Account */}
         <div className="flex flex-col items-center justify-center w-full h-full p-4 shadow-2xl">
           <div className="bg-gradient-to-tr from-[#1d0934] to-[#441273] shadow-xl rounded-2xl p-10 max-w-md w-full border border-slate-700">
             <h1 className="text-2xl font-semibold text-center mb-6 text-white">
@@ -356,6 +451,8 @@ export default function App() {
             )}
           </div>
         </div>
+
+        {/* Transfer Token */}
         <div className="flex flex-col items-center justify-center w-full h-full p-4 shadow-2xl">
           <div className="bg-gradient-to-tr from-[#1d0934] to-[#441273] shadow-xl rounded-2xl p-10 max-w-md w-full border border-slate-700">
             <h1 className="text-2xl font-semibold text-center mb-6 text-white">
@@ -393,7 +490,7 @@ export default function App() {
                 type="number"
                 placeholder="Enter Amount"
                 value={tokenAmount}
-                disabled={loading}
+                disabled={loading1}
                 // onChange={(e) => setTokenAmount(e.target.value)}
                 onChange={(e) => setTokenAmount(Number(e.target.value))}
                 className="w-full mb-6 px-4 py-3 border border-gray-500 rounded-xl focus:outline-none focus:ring-2 text-gray-400 focus:ring-blue-500"
@@ -403,14 +500,55 @@ export default function App() {
             <button
               onClick={transfertoken}
               className="w-full bg-blue-800 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition cursor-pointer"
-              disabled={loading}
+              disabled={loading1}
             >
               Transfer Token
             </button>
 
-            {loading && (
+            {loading1 && (
               <div className="flex justify-center mt-4">
-                <ClipLoader size={50} color="#ffffff" loading={loading} />
+                <ClipLoader size={50} color="#ffffff" loading={loading1} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Unfreeze Account */}
+        <div className="flex flex-col items-center justify-center w-full h-full p-4 shadow-2xl">
+          <div className="bg-gradient-to-tr from-[#1d0934] to-[#441273] shadow-xl rounded-2xl p-10 max-w-md w-full border border-slate-700">
+            <h1 className="text-2xl font-semibold text-center mb-6 text-white">
+              UnFreeze Token Account
+            </h1>
+            <div className="space-y-3 flex flex-col">
+              {/* Token Freeze Form */}j
+              <label
+                htmlFor=""
+                className="text-white font-semibold mb-3 text-xl"
+              >
+                {" "}
+                Wallet Address
+              </label>
+              <input
+                type="text"
+                placeholder="User Wallet Address"
+                value={walletAddresss2}
+                onChange={(e) => setWalletAddresss2(e.target.value)}
+                className="w-full mb-10 px-4 py-2 border border-gray-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                // disabled={true}
+              />
+            </div>
+
+            <button
+              onClick={handleUnfreeze}
+              className="w-full bg-blue-800 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition cursor-pointer"
+              disabled={loading2}
+            >
+              Unfreeze Account
+            </button>
+
+            {loading2 && (
+              <div className="flex justify-center mt-4">
+                <ClipLoader size={50} color="#ffffff" loading={loading2} />
               </div>
             )}
           </div>
