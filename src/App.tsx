@@ -21,7 +21,7 @@ if (typeof global.Buffer === "undefined") {
 // const network = WalletAdapterNetwork.Devnet;
 
 export default function App() {
-  const { connection } = useConnection();
+  // const { connection } = useConnection();
   const { publicKey, disconnect, connected, sendTransaction } = useWallet();
   const [walletAddress, setWalletAddress] = useState("");
   const [walletAddresss, setWalletAddresss] = useState("");
