@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
-  // createAssociatedTokenAccountInstruction,
+  createAssociatedTokenAccountInstruction,
   createFreezeAccountInstruction,
   createThawAccountInstruction,
   createTransferInstruction,
@@ -35,8 +35,10 @@ export default function App() {
   const [walletAddresss, setWalletAddresss] = useState("");
   // const [walletAddresss2, setWalletAddresss2] = useState("");
   const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
-  const [tokenAmount, setTokenAmount] = useState<string | number  >("");
-  const [mintAddress] = useState("kBF6XUivjf1SP2E868WXGu2KqQsNrSuj4HCvkLeP2MY");
+  const [tokenAmount, setTokenAmount] = useState<string | number>("");
+  const [mintAddress] = useState(
+    "GVwtCsXaz2bSgjYaw38i77AYSXh6Jk47MQNdiDfWrCiv"
+  );
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -62,7 +64,10 @@ export default function App() {
     setLoading(true);
 
     try {
-      const connection = new Connection("https://api.devnet.solana.com");
+      // const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(
+        "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
+      ); // For Mainnet
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleFreeze ~ mint:", mint.toString());
@@ -171,7 +176,10 @@ export default function App() {
     setLoading2(true);
 
     try {
-      const connection = new Connection("https://api.devnet.solana.com");
+      // const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(
+        "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
+      ); // For Mainnet
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleUnfreeze ~ mint:", mint.toString());
       const userWalletAddress = new PublicKey(walletAddresss);
@@ -260,7 +268,10 @@ export default function App() {
     setLoading1(true);
 
     try {
-      const connection = new Connection("https://api.devnet.solana.com");
+      // const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(
+        "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
+      ); // For Mainnet
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       const userWalletAddress = new PublicKey(walletAddresssTransfer);
@@ -281,6 +292,26 @@ export default function App() {
         mint,
         userWalletAddress
       );
+      console.log(
+        "🚀 ~ transfertoken ~ userTokenAccount:",
+        userTokenAccount.toString()
+      );
+
+      if (!userTokenAccount) {
+        console.log("❌ User token account doesn't exist. Creating one...");
+        const createATAIx = createAssociatedTokenAccountInstruction(
+          publicKey, // payer (signer)
+          userWalletAddress, // associated token account
+          publicKey, // owner of the token account
+          mint // token mint
+        );
+
+        const transaction = new Transaction().add(createATAIx);
+
+        // Send the transaction
+        const result = await sendTransaction(transaction, connection);
+        console.log("🚀 ~ transfertoken ~ result:", result);
+      }
       //    const userTokenAccount = await getOrCreateAssociatedTokenAccount(
       //   connection,
       //   senderKeypair,
@@ -288,7 +319,10 @@ export default function App() {
       //   publicKey,
       //   true
       // );
-      console.log("🚀 ~ Transfer ~ userTokenAccount:", userTokenAccount);
+      console.log(
+        "🚀 ~ Transfer ~ userTokenAccount:",
+        userTokenAccount.toString()
+      );
 
       console.log("🚀 ~ Transfer ~ mintAddress:", mintAddress);
 
@@ -299,27 +333,23 @@ export default function App() {
 
       // Check mint info and freeze authority
       const mintInfo = await getMint(connection, new PublicKey(mintAddress));
-      console.log("🚀 ~ handleFreeze ~ mintInfo:", mintInfo);
-      if (!mintInfo.freezeAuthority) {
-        console.error("Mint has no freeze authority");
-        toast.error("❌ Mint has no freeze authority.");
-        setLoading1(false);
-        return;
-      }
+      // console.log("🚀 ~ handleFreeze ~ mintInfo:", mintInfo);
+      // if (!mintInfo.freezeAuthority) {
+      //   console.error("Mint has no freeze authority");
+      //   toast.error("❌ Mint has no freeze authority.");
+      //   setLoading1(false);
+      //   return;
+      // }
 
       // let userTokenAccountChecked;
       // let userTokenAccountCheckeds;
       // Check if the user token account exists
-       // Try fetching the user's token account info
-      
+      // Try fetching the user's token account info
+
       // try {
       // } catch (error) {
       //   console.log("❌ User token account doesn't exist. Creating one...");
-      //   const associatedTokenAddress = await getAssociatedTokenAddress(
-      //     mint,
-      //     userWalletAddress
-      //   );
-      //   console.log("🚀 ~ transfertoken ~ associatedTokenAddress:", associatedTokenAddress)
+      //
 
       //   if (!associatedTokenAddress) {
       //     const createATAIx = createAssociatedTokenAccountInstruction(
@@ -328,9 +358,9 @@ export default function App() {
       //       publicKey, // owner of the token account
       //       mint // token mint
       //     );
-          
+
       //     const transaction = new Transaction().add(createATAIx);
-          
+
       //     // Send the transaction
       //     const result = await sendTransaction(transaction, connection);
       //     console.log("🚀 ~ transfertoken ~ result:", result)
@@ -352,34 +382,35 @@ export default function App() {
       //   // );
       //   // const transaction = new Transaction().add(userTokenAccountChecked);
       //   // await sendTransaction(transaction, connection); // Send transaction to create the token account
-      
 
       // }
 
-    const userTokenAccountChecked = await getAccount(
-        connection,
-        userTokenAccount
-      );
+      // const userTokenAccountChecked = await getAccount(
+      //   connection,
+      //  new PublicKey(userWalletAddress)
+      // );
+      // console.log("🚀 ~ transfertoken ~ userTokenAccountChecked:", userTokenAccountChecked)
 
       const decimals = mintInfo.decimals;
 
       // Handle the potential undefined case
-        const tokenAmountAsNumber = typeof tokenAmount === "string" 
-          ? Number(tokenAmount) 
+      const tokenAmountAsNumber =
+        typeof tokenAmount === "string"
+          ? Number(tokenAmount)
           : tokenAmount ?? 0; // Default to 0 if tokenAmount is undefined or null
 
-        if (isNaN(tokenAmountAsNumber)) {
-          throw new Error("Invalid token amount");
-        }
+      if (isNaN(tokenAmountAsNumber)) {
+        throw new Error("Invalid token amount");
+      }
 
-        // Perform the arithmetic operation
-        const tokenAmounts = BigInt(tokenAmountAsNumber * Math.pow(10, decimals));
+      // Perform the arithmetic operation
+      const tokenAmounts = BigInt(tokenAmountAsNumber * Math.pow(10, decimals));
       // const tokenAmounts = BigInt(tokenAmount * Math.pow(10, decimals));
 
       console.log("🚀 ~ transfertoken ~ userTokenAccount:", userTokenAccount);
       const transferInstruction = createTransferInstruction(
         ownerTokenAccount,
-        new PublicKey(userTokenAccountChecked.address.toString()),
+        new PublicKey(userTokenAccount.toString()),
         publicKey,
         tokenAmounts // Specify the amount to transfer
         // TOKEN_PROGRAM_ID
@@ -455,8 +486,9 @@ export default function App() {
         </div>
       </nav>
 
-      { publicKey && publicKey.toString() === "G6CsCYem33oCCAUzNs6MQr2HTjo9V1q56K5N1jjJ9Cxq" ? (
-        
+      {publicKey &&
+      publicKey.toString() ===
+        "Gx5zR959tLV5QZthQvv6YjsXyp9WL3UnFfYNaGQzkB7z" ? (
         <TokenManagerPanel
           handleFreeze={handleFreeze}
           handleUnfreeze={handleUnfreeze}
@@ -488,9 +520,7 @@ export default function App() {
             </div>
           </div>
         </div>
-      )
-      }
-
+      )}
 
       <ToastContainer />
     </div>
