@@ -33,11 +33,10 @@ export default function App() {
   const { publicKey, disconnect, connected, sendTransaction } = useWallet();
   const [walletAddress, setWalletAddress] = useState("");
   const [walletAddresss, setWalletAddresss] = useState("");
-  const [walletAddresss2, setWalletAddresss2] = useState("");
+  // const [walletAddresss2, setWalletAddresss2] = useState("");
   const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
-  const [tokenAmount, setTokenAmount] = useState<string | number  >();
+  const [tokenAmount, setTokenAmount] = useState<string | number  >("");
   const [mintAddress] = useState("kBF6XUivjf1SP2E868WXGu2KqQsNrSuj4HCvkLeP2MY");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -151,11 +150,11 @@ export default function App() {
 
       toast.success("✅ Token account frozen successfully!");
 
-      setMessage("✅ Token account frozen successfully!");
+      // setMessage("✅ Token account frozen successfully!");
     } catch (err) {
       const error = err as Error;
       console.error(err);
-      setMessage("❌ Failed to freeze account: " + err);
+      // setMessage("❌ Failed to freeze account: " + err);
       toast.error(`${error.message}`);
     } finally {
       setLoading(false); // Hide spinner when done
@@ -411,7 +410,7 @@ export default function App() {
     } catch (err) {
       const error = err as Error;
       console.error(err);
-      setMessage("❌ Failed to freeze account: " + err);
+      // setMessage("❌ Failed to freeze account: " + err);
       toast.error(` ${error.message}`);
     } finally {
       setLoading1(false); // Hide spinner when done
@@ -466,14 +465,14 @@ export default function App() {
           loadingUnfreeze={loading2}
           loadingTransfer={loading1}
           setWalletAddresss={setWalletAddresss}
-          setWalletAddresss2={setWalletAddresss2}
+          // setWalletAddresss2={setWalletAddresss2}
           setWalletAddresssTransfer={setWalletAddresssTransfer}
           walletAddresstransfer={walletAddresssTransfer}
           walletAddresss={walletAddresss}
-          walletAddresss2={walletAddresss2}
+          // walletAddresss2={walletAddresss2}
           tokenAmount={tokenAmount}
           setTokenAmount={setTokenAmount}
-          message={message}
+          // message={message}
           // walletAddresss={walletAddresss}
         />
       ) : (
