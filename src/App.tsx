@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
-  createAssociatedTokenAccountInstruction,
+  // createAssociatedTokenAccountInstruction,
   createFreezeAccountInstruction,
   createThawAccountInstruction,
   createTransferInstruction,
-  getOrCreateAssociatedTokenAccount,
+  // getOrCreateAssociatedTokenAccount,
   // TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { getMint, getAccount } from "@solana/spl-token";
@@ -35,7 +35,7 @@ export default function App() {
   const [walletAddresss, setWalletAddresss] = useState("");
   const [walletAddresss2, setWalletAddresss2] = useState("");
   const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
-  const [tokenAmount, setTokenAmount] = useState<number | undefined>(undefined);
+  const [tokenAmount, setTokenAmount] = useState<string | number  >();
   const [mintAddress] = useState("kBF6XUivjf1SP2E868WXGu2KqQsNrSuj4HCvkLeP2MY");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -363,7 +363,18 @@ export default function App() {
       );
 
       const decimals = mintInfo.decimals;
-      const tokenAmounts = BigInt((tokenAmount ?? 0) * Math.pow(10, decimals));
+
+      // Handle the potential undefined case
+        const tokenAmountAsNumber = typeof tokenAmount === "string" 
+          ? Number(tokenAmount) 
+          : tokenAmount ?? 0; // Default to 0 if tokenAmount is undefined or null
+
+        if (isNaN(tokenAmountAsNumber)) {
+          throw new Error("Invalid token amount");
+        }
+
+        // Perform the arithmetic operation
+        const tokenAmounts = BigInt(tokenAmountAsNumber * Math.pow(10, decimals));
       // const tokenAmounts = BigInt(tokenAmount * Math.pow(10, decimals));
 
       console.log("🚀 ~ transfertoken ~ userTokenAccount:", userTokenAccount);
