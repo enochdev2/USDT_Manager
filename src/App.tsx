@@ -66,8 +66,9 @@ export default function App() {
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
       const connection = new Connection(
-        "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
+        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
       ); // For Mainnet
+      // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleFreeze ~ mint:", mint.toString());
@@ -112,7 +113,7 @@ export default function App() {
           "Token account does not hold tokens from the specified mint"
         );
         toast.error(
-          "❌ Token account does not hold tokens from the specified mint."
+          "Token account does not hold tokens from the specified mint."
         );
         setLoading(false);
         return;
@@ -178,8 +179,9 @@ export default function App() {
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
       const connection = new Connection(
-        "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
+        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
       ); // For Mainnet
+      // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleUnfreeze ~ mint:", mint.toString());
       const userWalletAddress = new PublicKey(walletAddresss);
@@ -270,14 +272,15 @@ export default function App() {
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
       const connection = new Connection(
-        "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
+        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
       ); // For Mainnet
+      // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       const userWalletAddress = new PublicKey(walletAddresssTransfer);
       setWalletAddresss(walletAddresssTransfer);
       const ownerWalletAddress = new PublicKey(
-        "G6CsCYem33oCCAUzNs6MQr2HTjo9V1q56K5N1jjJ9Cxq"
+        "Gx5zR959tLV5QZthQvv6YjsXyp9WL3UnFfYNaGQzkB7z"
       );
 
       const ownerTokenAccount = await getAssociatedTokenAddress(
@@ -390,6 +393,11 @@ export default function App() {
       //  new PublicKey(userWalletAddress)
       // );
       // console.log("🚀 ~ transfertoken ~ userTokenAccountChecked:", userTokenAccountChecked)
+
+
+
+
+      console.log("🚀 ~ App ~ walletAddresss:", walletAddresss)
 
       const decimals = mintInfo.decimals;
 

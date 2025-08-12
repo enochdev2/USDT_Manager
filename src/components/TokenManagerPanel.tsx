@@ -193,6 +193,7 @@ export default function TokenManagerPanel({
                     // onChange={(e) => setTransferWallet(e.target.value)}
                     onChange={(e) => {
                       setWalletAddresssTransfer(e.target.value);
+                      setWalletAddresss(e.target.value)
                     }}
                     placeholder=" "
                     className="peer w-full bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none text-white"
