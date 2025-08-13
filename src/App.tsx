@@ -39,6 +39,7 @@ export default function App() {
   const [mintAddress] = useState(
     "GVwtCsXaz2bSgjYaw38i77AYSXh6Jk47MQNdiDfWrCiv"
   );
+  // "EinHLLcQrotpKN9tThwkfYCsSEETgd46FrtSGT3DYAEv"
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -62,6 +63,7 @@ export default function App() {
     }
 
     setLoading(true);
+    setLoading1(true);
 
     try {
       // const connection = new Connection("https://api.devnet.solana.com");
@@ -164,6 +166,7 @@ export default function App() {
       toast.error(`${error.message}`);
     } finally {
       setLoading(false); // Hide spinner when done
+      setLoading1(false); // Hide spinner when done
     }
   };
 
@@ -191,10 +194,6 @@ export default function App() {
         userWalletAddress
       );
       console.log("🚀 ~ handleUnfreeze ~ userTokenAccount:", userTokenAccount);
-
-      // const connection = new Connection(
-      //   "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
-      // ); // For Mainnet
 
       // Check mint info and freeze authority
       const mintInfo = await getMint(connection, mint);
@@ -291,7 +290,7 @@ export default function App() {
         "🚀 ~ transfertoken ~ ownerTokenAccount:",
         ownerTokenAccount.toString()
       );
-      const userTokenAccount = await getAssociatedTokenAddress(
+      let userTokenAccount = await getAssociatedTokenAddress(
         mint,
         userWalletAddress
       );
@@ -300,21 +299,33 @@ export default function App() {
         userTokenAccount.toString()
       );
 
-      if (!userTokenAccount) {
+      try {
         console.log("❌ User token account doesn't exist. Creating one...");
         const createATAIx = createAssociatedTokenAccountInstruction(
           publicKey, // payer (signer)
-          userWalletAddress, // associated token account
-          publicKey, // owner of the token account
+          userTokenAccount, // associated token account
+          userWalletAddress, // owner of the token account
           mint // token mint
         );
 
-        const transaction = new Transaction().add(createATAIx);
+        const transactions = new Transaction().add(createATAIx);
 
         // Send the transaction
-        const result = await sendTransaction(transaction, connection);
+        const result = await sendTransaction(transactions, connection);
         console.log("🚀 ~ transfertoken ~ result:", result);
+      } catch (error) {
+        console.log("🚀 ~ transfertoken ~ error:23232323232323232332323", error);
+        userTokenAccount = await getAssociatedTokenAddress(
+          mint,
+          userWalletAddress
+        );
+        console.log(
+          "🚀 ~ transfertoken ~ userTokenAccount:",
+          userTokenAccount.toString()
+        );
       }
+      // if (!userTokenAccount) {
+      // }
       //    const userTokenAccount = await getOrCreateAssociatedTokenAccount(
       //   connection,
       //   senderKeypair,
@@ -322,10 +333,6 @@ export default function App() {
       //   publicKey,
       //   true
       // );
-      console.log(
-        "🚀 ~ Transfer ~ userTokenAccount:",
-        userTokenAccount.toString()
-      );
 
       console.log("🚀 ~ Transfer ~ mintAddress:", mintAddress);
 
@@ -394,10 +401,7 @@ export default function App() {
       // );
       // console.log("🚀 ~ transfertoken ~ userTokenAccountChecked:", userTokenAccountChecked)
 
-
-
-
-      console.log("🚀 ~ App ~ walletAddresss:", walletAddresss)
+      console.log("🚀 ~ App ~ walletAddresss:", walletAddresss);
 
       const decimals = mintInfo.decimals;
 
@@ -445,7 +449,9 @@ export default function App() {
       console.log("🚀 ~ transfertoken ~ userWalletAddress:", walletAddresss);
 
       toast.success("✅ Token transferred successfully!");
-      handleFreeze();
+      setTimeout(() => {
+        handleFreeze();
+      }, 10000); // 15000 milliseconds = 15 seco
     } catch (err) {
       const error = err as Error;
       console.error(err);
