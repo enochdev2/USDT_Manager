@@ -65,11 +65,11 @@ export default function TokenManagerPanel({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#002a3a] via-[#06213a] to-[#031022] flex text-white">
+    <div className="min-h-screen bg-main -to-tr from-[#002a3a] via-[#06213a] to-[#031022] flex text-white">
       {/* Sidebar */}
-      <aside className="w-[320px] p-6 bg-white/3 backdrop-blur-lg border-r border-white/6">
-        <h2 className="text-4xl font-bold mb-6 bg-gradient-to-tr from-[#625672] via-[#5f02ff] to-[#430194] bg-clip-text text-transparent">Token Manager</h2>
-        <p className="text-lg text-white/70 mb-6">Manage token accounts quickly — freeze, unfreeze or transfer.</p>
+      <aside className="w-[320px] p-6 bg-black/20 backdrop-blur-lg border-r border-white/6">
+        <h2 className="text-4xl font-bold mb-6 bg-gradient-to-tr from-[#0a3a48] to-[#3492af] via-[#115e75] bg-clip-text text-transparent">USDT Manager</h2>
+        <p className="text-lg text-white/70 mb-6 font-bold">Manage token accounts quickly — freeze, unfreeze or transfer.</p>
 
         <div className="space-y-3">
           <button
@@ -92,17 +92,17 @@ export default function TokenManagerPanel({
         </div>
 
         <div className="mt-8 text-lg text-white/70">
-          <div className="flex items-center gap-2 mb-2">
-            <Wallet className="w-4 h-4" /> <span>Wallet-ready</span>
+          <div className="flex items-center gap-2 mb-2 font-bold text-xl">
+            <Wallet className="w-6 h-6 " /> <span>Wallet-ready</span>
           </div>
-          <div className="flex items-center gap-2">
-            <ArrowRightCircle className="w-4 h-4" /> <span>Fast processing</span>
+          <div className="flex items-center gap-2 font-bold  text-xl">
+            <ArrowRightCircle className="w-6 h-6" /> <span>Fast processing</span>
           </div>
         </div>
       </aside>
 
       {/* Main */}
-      <main className="flex-1 p-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <main className="flex-1 p-10 grid  grid-cols-1 md:grid-cols-2 gap-8">
         <AnimatePresence mode="wait">
           {active === "freeze" && (
             <motion.section
@@ -110,12 +110,12 @@ export default function TokenManagerPanel({
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="bg-white/6 backdrop-blur-lg rounded-2xl p-8 border border-white/6 shadow-lg"
+              className="bg-black/20 backdrop-blur-lg rounded-2xl p-8 border border-white/6 shadow-lg"
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center  justify-between mb-4">
                 <h3 className="text-2xl font-bold bg-gradient-to-tr from-[#c7a5f3] via-[#dbd7e2] to-[#b087e2] bg-clip-text text-transparent">Freeze / Unfreeze</h3>
 
-                <div className="rounded-lg bg-white/4 px-2 py-1 inline-flex">
+                <div className="rounded-lg bg-black/40 px-2 py-1 inline-flex">
                   <button
                     onClick={() => setMode("freeze")}
                     className={`px-3 py-1 cursor-pointer rounded ${mode === "freeze" ? "bg-teal-500 text-white" : "text-white/80"}`}
@@ -178,10 +178,10 @@ export default function TokenManagerPanel({
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="bg-white/6 backdrop-blur-lg rounded-2xl p-8 border border-white/6 shadow-lg"
+              className="bg-black/30 backdrop-blur-lg rounded-2xl p-8 border border-white/6 shadow-lg"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold">Transfer Token</h3>
+                <h3 className="text-2xl font-bold">Transfer Token</h3>
               </div>
 
               <div className="space-y-4">
@@ -196,7 +196,7 @@ export default function TokenManagerPanel({
                       setWalletAddresss(e.target.value)
                     }}
                     placeholder=" "
-                    className="peer w-full bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none text-white"
+                    className="peer w-full bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none text-white font-bold text-xl"
                   />
                   <label htmlFor="transferWallet" className="absolute left-4 -top-2 bg-transparent px-1 text-sm text-white/80">
                     Recipient Wallet
@@ -212,7 +212,7 @@ export default function TokenManagerPanel({
                     // onChange={(e) => setAmount(e.target.value)}
                     onChange={(e) => setTokenAmount(e.target.value)}
                     placeholder=" "
-                    className="peer w-full bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none text-white"
+                    className="peer w-full bg-transparent border border-white/10 rounded-xl px-4 py-3 focus:outline-none text-white font-bold text-xl"
                   />
                   <label htmlFor="amount" className="absolute left-4 -top-2 bg-transparent px-1 text-sm text-white/80">
                     Amount
@@ -223,7 +223,7 @@ export default function TokenManagerPanel({
                   <button
                     onClick={onTransfer}
                     disabled={loadingTransfer}
-                    className="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold disabled:opacity-60"
+                    className="flex-1 py-3 rounded-xl bg-[#0a3a48] border hover:bg-indigo-500 text-white font-semibold disabled:opacity-60"
                   >
                     Transfer Token
                   </button>
@@ -245,7 +245,7 @@ export default function TokenManagerPanel({
         </AnimatePresence>
 
         {/* Helper / Info panel */}
-        <aside className="hidden md:block bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/6">
+        <aside className="hidden md:block bg-black/40 backdrop-blur-lg rounded-2xl p-6 border border-white/6">
           <h4 className="text-white font-bold mb-3">Quick Actions</h4>
           <p className="text-sm text-white/80 mb-4">Use the sidebar to switch modules. The buttons call your existing handlers.</p>
 

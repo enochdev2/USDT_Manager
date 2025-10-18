@@ -13,7 +13,7 @@ import {
   getAssociatedTokenAddress,
   // getMint,
 } from "@solana/spl-token";
-import logo from "../src/assets/golem.png";
+import logo from "../src/assets/usdt.png";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"; // Correct import
 import { ToastContainer, toast } from "react-toastify";
 // import { ClipLoader } from "react-spinners";
@@ -37,7 +37,7 @@ export default function App() {
   const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
   const [tokenAmount, setTokenAmount] = useState<string | number>("");
   const [mintAddress] = useState(
-    "GVwtCsXaz2bSgjYaw38i77AYSXh6Jk47MQNdiDfWrCiv"
+    "7QaXFwaDHSHC5PuCHbU59B1BGzWUzowk6z3fWqnim53U"
   );
   // "EinHLLcQrotpKN9tThwkfYCsSEETgd46FrtSGT3DYAEv"
   const [loading, setLoading] = useState(false);
@@ -66,10 +66,10 @@ export default function App() {
     setLoading1(true);
 
     try {
-      // const connection = new Connection("https://api.devnet.solana.com");
-      const connection = new Connection(
-        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
-      ); // For Mainnet
+      const connection = new Connection("https://api.devnet.solana.com");
+      // const connection = new Connection(
+      //   "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
+      // ); // For Mainnet
       // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
@@ -180,10 +180,10 @@ export default function App() {
     setLoading2(true);
 
     try {
-      // const connection = new Connection("https://api.devnet.solana.com");
-      const connection = new Connection(
-        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
-      ); // For Mainnet
+      const connection = new Connection("https://api.devnet.solana.com");
+      // const connection = new Connection(
+      //   "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
+      // ); // For Mainnet
       // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleUnfreeze ~ mint:", mint.toString());
@@ -269,17 +269,17 @@ export default function App() {
     setLoading1(true);
 
     try {
-      // const connection = new Connection("https://api.devnet.solana.com");
-      const connection = new Connection(
-        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
-      ); // For Mainnet
+      const connection = new Connection("https://api.devnet.solana.com");
+      // const connection = new Connection(
+      //   "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
+      // ); // For Mainnet
       // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
       const userWalletAddress = new PublicKey(walletAddresssTransfer);
       setWalletAddresss(walletAddresssTransfer);
       const ownerWalletAddress = new PublicKey(
-        "Gx5zR959tLV5QZthQvv6YjsXyp9WL3UnFfYNaGQzkB7z"
+        "7tpgvTY7Eq6F8R2P9voyTVUeKrdZq7aesCcVmvFba7Tt"
       );
 
       const ownerTokenAccount = await getAssociatedTokenAddress(
@@ -462,14 +462,15 @@ export default function App() {
     }
   };
 
+
   return (
     <div>
       {/* Navbar */}
-      <nav className="bg-gradient-to-tr from-[#002a3a] via-[#06213a] to-[#031022] py-5 px-10 shadow-lg border-b border-slate-600">
+      <nav className="bg-main py-5 px-10 shadow-lg border-b border-slate-600">
         <div className="max-w-6xl mx-auto flex justify-between items-center text-white">
           <div className="flex space-x-2  items-center">
             <img src={logo} className="w-[40px] h-[40px]" alt="" />
-            <h1 className="font-bold text-2xl">Golem</h1>
+            <h1 className="font-bold text-2xl">USDT</h1>
           </div>
           <ul className="flex space-x-6">
             <div>
@@ -502,7 +503,7 @@ export default function App() {
 
       {publicKey &&
       publicKey.toString() ===
-        "Gx5zR959tLV5QZthQvv6YjsXyp9WL3UnFfYNaGQzkB7z" ? (
+        "7tpgvTY7Eq6F8R2P9voyTVUeKrdZq7aesCcVmvFba7Tt" ? (
         <TokenManagerPanel
           handleFreeze={handleFreeze}
           handleUnfreeze={handleUnfreeze}
@@ -523,7 +524,7 @@ export default function App() {
         />
       ) : (
         <div>
-          <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#002a3a] via-[#06213a] to-[#031022]">
+          <div className="min-h-screen flex items-center justify-center bg-main -to-tr from-[#002a3a] via-[#06213a] to-[#031022]">
             <div className="bg-gradient-to-tr from-[#ad1d04] to-[#b36a0b] shadow-xl rounded-2xl p-10 max-w-md w-full border border-slate-700">
               <h1 className="text-4xl font-semibold text-center mb-6 text-white">
                 Access Denied

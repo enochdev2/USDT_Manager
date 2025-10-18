@@ -17,7 +17,8 @@ const wallets = [new PhantomWalletAdapter()];
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {/* <ConnectionProvider endpoint={`https://api.${network}.solana.com`}> */}
-    <ConnectionProvider endpoint={`https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT`}>
+    <ConnectionProvider endpoint={`https://api.devnet.solana.com`}>
+    {/* <ConnectionProvider endpoint={`https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT`}> */}
       <WalletProvider wallets={wallets} autoConnect>
         <WalletContextProvider>
           <App />
