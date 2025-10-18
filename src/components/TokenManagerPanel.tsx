@@ -158,7 +158,7 @@ export default function TokenManagerPanel({
                     {mode === "freeze" ? "Freeze Account" : "Unfreeze Account"}
                   </button>
 
-                  <button onClick={() => {setWalletAddresss(""); setWalletAddresssTransfer("");}} className="px-4 py-3 rounded-xl bg-white/6 cursor-pointer text-white">
+                  <button onClick={() => {setWalletAddresss(""); setWalletAddresssTransfer("");}} className="px-4 py-3 rounded-xl bg-black/30 text-white cursor-pointer">
                     Clear
                   </button>
                 </div>
@@ -223,12 +223,12 @@ export default function TokenManagerPanel({
                   <button
                     onClick={onTransfer}
                     disabled={loadingTransfer}
-                    className="flex-1 py-3 rounded-xl bg-[#0a3a48] border hover:bg-indigo-500 text-white font-semibold disabled:opacity-60"
+                    className="flex-1 py-3 rounded-xl bg-[#0a3a48] border hover:bg-indigo-500 text-white font-semibold disabled:opacity-60 cursor-pointer"
                   >
                     Transfer Token
                   </button>
 
-                  <button onClick={() => {setWalletAddresss(""); setWalletAddresssTransfer("");}} className="px-4 py-3 rounded-xl bg-white/6 text-white">
+                  <button onClick={() => {setWalletAddresss(""); setWalletAddresssTransfer("");}} className="px-4 py-3 rounded-xl bg-black/30 border cursor-pointer text-white">
                     Clear
                   </button>
                 </div>
@@ -246,15 +246,15 @@ export default function TokenManagerPanel({
 
         {/* Helper / Info panel */}
         <aside className="hidden md:block bg-black/40 backdrop-blur-lg rounded-2xl p-6 border border-white/6">
-          <h4 className="text-white font-bold mb-3">Quick Actions</h4>
-          <p className="text-sm text-white/80 mb-4">Use the sidebar to switch modules. The buttons call your existing handlers.</p>
+          <h4 className="text-white font-bold text-2xl mb-3">Quick Actions</h4>
+          <p className="text-lg text-white/80 mb-4 font-bold t">Use the sidebar to switch modules. The buttons call your existing handlers.</p>
 
           <div className="space-y-3 text-white/80">
             <div className="flex items-center gap-2">
-              <Wallet className="w-4 h-4" /> <span className="text-sm">Recent: 3 freezes</span>
+              <Wallet className="w-6 h-6" /> <span className="text-lg font-semibold">Recent: 3 freezes</span>
             </div>
             <div className="flex items-center gap-2">
-              <ArrowRightCircle className="w-4 h-4" /> <span className="text-sm">Last transfer: 100 USDT</span>
+              <ArrowRightCircle className="w-6 h-6" /> <span className="text-lg font-semibold">Last transfer: 100 USDT</span>
             </div>
           </div>
         </aside>
