@@ -37,7 +37,7 @@ export default function App() {
   const [walletAddresssTransfer, setWalletAddresssTransfer] = useState("");
   const [tokenAmount, setTokenAmount] = useState<string | number>("");
   const [mintAddress] = useState(
-    "7QaXFwaDHSHC5PuCHbU59B1BGzWUzowk6z3fWqnim53U"
+    "AJcZe76gF825j1xVCzcRJvj547HbdAD8SY4tVAW62ZCM"
   );
   // "EinHLLcQrotpKN9tThwkfYCsSEETgd46FrtSGT3DYAEv"
   const [loading, setLoading] = useState(false);
@@ -66,10 +66,10 @@ export default function App() {
     setLoading1(true);
 
     try {
-      const connection = new Connection("https://api.devnet.solana.com");
-      // const connection = new Connection(
-      //   "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
-      // ); // For Mainnet
+      // const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(
+        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
+      ); // For Mainnet
       // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
@@ -180,10 +180,10 @@ export default function App() {
     setLoading2(true);
 
     try {
-      const connection = new Connection("https://api.devnet.solana.com");
-      // const connection = new Connection(
-      //   "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
-      // ); // For Mainnet
+      // const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(
+        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
+      ); // For Mainnet
       // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       const mint = new PublicKey(mintAddress);
       console.log("🚀 ~ handleUnfreeze ~ mint:", mint.toString());
@@ -269,10 +269,10 @@ export default function App() {
     setLoading1(true);
 
     try {
-      const connection = new Connection("https://api.devnet.solana.com");
-      // const connection = new Connection(
-      //   "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
-      // ); // For Mainnet
+      // const connection = new Connection("https://api.devnet.solana.com");
+      const connection = new Connection(
+        "https://solana-mainnet.core.chainstack.com/8393f5827d60e7ae4d89ec37dba2b906"
+      ); // For Mainnet
       // "https://solana-mainnet.g.alchemy.com/v2/chL87jzrfXklYJR_OmMTNKc1Ab1OfQpT"
       // const userWallet = publicKey;
       const mint = new PublicKey(mintAddress);
